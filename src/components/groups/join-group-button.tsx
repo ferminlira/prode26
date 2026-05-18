@@ -37,7 +37,7 @@ export function JoinGroupButton({ inviteCode, groupId, isLoggedIn }: Props) {
       .insert({
         group_id: groupId,
         user_id: user.id,
-      })
+      } as any)
 
     if (memberError) {
       if (memberError.code === '23505') {

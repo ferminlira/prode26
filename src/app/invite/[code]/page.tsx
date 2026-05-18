@@ -26,8 +26,8 @@ export default async function InvitePage({ params }: Props) {
   // básicos del grupo dado un invite_code, sin requerir membresía.
   // Ver supabase/functions/get_group_preview.sql adjunto.
   const { data: preview, error } = await supabase
-    .rpc('get_group_preview', { p_invite_code: code })
-    .single()
+    .rpc('get_group_preview', { p_invite_code: code } as any)
+    .single() as any
 
   if (error || !preview) {
     return <InvalidInvite />

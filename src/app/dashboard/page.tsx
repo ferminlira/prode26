@@ -24,7 +24,7 @@ export default async function DashboardPage() {
       )
     `)
     .eq('user_id', user.id)
-    .order('joined_at', { ascending: false })
+    .order('joined_at', { ascending: false }) as any
 
   const groups = (memberships ?? [])
     .map((m: any) => m.groups)

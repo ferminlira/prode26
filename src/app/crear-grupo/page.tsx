@@ -34,12 +34,12 @@ export default function CrearGrupoPage() {
       .from('groups')
       .insert({
         name: form.name.trim(),
-        created_by: user.id,          // ← created_by, no owner_id
+        created_by: user.id,
         invite_code,
         penalty_text: form.penalty_text.trim() || null,
-      })
+      } as any)
       .select('id, invite_code')
-      .single()
+      .single() as any
 
     if (groupError || !group) {
       setError('No se pudo crear el grupo. Intentá de nuevo.')
@@ -51,7 +51,7 @@ export default function CrearGrupoPage() {
       group_id: group.id,
       user_id: user.id,
       role: 'admin',
-    })
+    } as any)
 
     router.push(`/grupo/${group.id}?nuevo=true`)
   }

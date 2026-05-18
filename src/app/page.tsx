@@ -1,65 +1,118 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+// app/page.tsx
+// Landing/Login — magic link via email
+// Mobile-first, español
+
+import { useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+
+export default function LoginPage() {
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [sent, setSent] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    const supabase = createClient()
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+
+    if (error) {
+      setError('Algo salió mal. Revisá el email e intentá de nuevo.')
+    } else {
+      setSent(true)
+    }
+
+    setLoading(false)
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-[#0C0C0C] flex flex-col items-center justify-center px-5">
+      {/* Logo / Marca */}
+      <div className="mb-10 text-center">
+        <div className="font-black text-5xl tracking-tighter text-white leading-none mb-1">
+          PRODE<span className="text-[#F5A623]">26</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+        <p className="text-[#888] text-sm font-medium tracking-widest uppercase">
+          Mundial · Grupo · Memoria
+        </p>
+      </div>
+
+      {/* Card */}
+      <div className="w-full max-w-sm bg-[#161616] rounded-2xl border border-[#262626] p-6">
+        {!sent ? (
+          <>
+            <h1 className="text-white font-semibold text-lg mb-1">
+              Entrar al prode
+            </h1>
+            <p className="text-[#888] text-sm mb-6">
+              Te mandamos un link al email — sin contraseña.
+            </p>
+
+            <form onSubmit={handleLogin} className="flex flex-col gap-3">
+              <Input
+                type="email"
+                placeholder="tu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+                className="bg-[#1E1E1E] border-[#2E2E2E] text-white placeholder:text-[#555] focus-visible:ring-[#F5A623] focus-visible:border-[#F5A623] h-11"
+              />
+
+              {error && (
+                <p className="text-red-400 text-xs">{error}</p>
+              )}
+
+              <Button
+                type="submit"
+                disabled={loading || !email}
+                className="bg-[#F5A623] text-black font-semibold h-11 hover:bg-[#E8981A] disabled:opacity-40"
+              >
+                {loading ? 'Enviando...' : 'Entrar →'}
+              </Button>
+            </form>
+
+            <p className="text-[#555] text-xs text-center mt-4">
+              Al entrar aceptás los términos de uso.
+            </p>
+          </>
+        ) : (
+          <div className="text-center py-2">
+            <div className="text-4xl mb-4">📬</div>
+            <h2 className="text-white font-semibold text-lg mb-2">
+              Revisá tu correo
+            </h2>
+            <p className="text-[#888] text-sm">
+              Mandamos un link a{' '}
+              <span className="text-white font-medium">{email}</span>.
+              Hacé click en él para entrar.
+            </p>
+            <button
+              onClick={() => { setSent(false); setEmail('') }}
+              className="text-[#F5A623] text-sm mt-4 underline-offset-2 hover:underline"
+            >
+              Usar otro email
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Footer hint */}
+      <p className="text-[#444] text-xs text-center mt-8 max-w-xs">
+        Prode26 es gratuito. Sin apuestas, sin plata. Solo orgullo.
+      </p>
+    </main>
+  )
 }

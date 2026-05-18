@@ -26,7 +26,7 @@ export default async function GrupoPage({ params, searchParams }: Props) {
       )
     `)
     .eq('id', id)
-    .single()
+    .single() as any
 
   if (error || !group) notFound()
 
