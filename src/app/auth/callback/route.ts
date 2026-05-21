@@ -38,7 +38,7 @@ export async function GET(request: Request) {
           id: user.id,
           display_name: displayName,
           preferred_locale: 'es',
-        });
+        } as never);
 
       if (profileError) {
         console.error('Profile creation error:', profileError);
