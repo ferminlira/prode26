@@ -50,7 +50,7 @@ export default function CrearGrupoPage() {
     await supabase.from('group_members').insert({
       group_id: group.id,
       user_id: user.id,
-      role: 'admin',
+      role: 'owner',
     } as any)
 
     router.push(`/grupo/${group.id}?nuevo=true`)
