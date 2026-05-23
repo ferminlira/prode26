@@ -20,7 +20,7 @@ export default async function DashboardPage() {
     .select(`
       group_id,
       groups (
-        id, name, photo_url, invite_code, owner_id, created_at
+        id, name, photo_url, invite_code, created_by, created_at
       )
     `)
     .eq('user_id', user.id)
