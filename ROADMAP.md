@@ -122,3 +122,49 @@ Cada sesión ~7 hs. Total ~50 hs antes del launch. Algo se va a recortar.
 - Cómo presentar la tipografía multi-script como marca
 - Estrategia de viralización pre-launch (memes, tendencias)
 - API de fútbol a usar para resultados en vivo durante el torneo
+
+
+
+
+## Onboarding
+
+### Principio rector
+
+El onboarding no es un slideshow genérico — es el primer momento de cercanía. El diseño varía según cómo llegó el usuario.
+
+### Dos flows de entrada
+
+**Flow A — El invitado** (mayoría de los usuarios)
+
+Llega via link de WhatsApp directamente a `/invite/[code]`. Ya tiene contexto: alguien de su círculo lo invitó. No necesita que le expliquen qué es la app.
+
+/invite/[code]
+├── Card del grupo (foto, nombre, miembros, penalty_text)
+├── CTA: "Unirme al grupo"
+└── Post-join → redirect a /grupo/[id]/predecir
+└── Banner: "Cargá tus predicciones antes del 11/06"
+
+Sin slides. Sin pasos extra. El contexto lo da el grupo en sí.
+
+**Flow B — El creador / orgánico**
+
+Llega desde redes o de oídas. No tiene contexto previo. Acá vale un momento de value prop.
+
+Homepage
+├── 3 cards deslizables (ver abajo)
+└── CTA: "Crear mi grupo"
+
+### Contenido de las 3 cards (Flow B)
+
+- **Card 1 — El gancho**: la energía de "72 partidos, un grupo, un solo campeón"
+- **Card 2 — El diferenciador**: armar el grupo, definir el penalty_text, el orgullo como premio
+- **Card 3 — La urgencia**: las predicciones de fase de grupos cierran el 11/06
+
+### Decisión descartada: preferencia de carga de predicciones
+
+Se evaluó agregar una pantalla de onboarding donde el usuario elige su "modo" de carga (todo de golpe / por jornada / por grupo). Descartado por: agrega fricción innecesaria, resuelve un problema de diseño de pantalla con una feature de configuración. La solución correcta es buena navegación dentro de `/grupo/[id]/predecir` (filtro por grupo A–L, filtro por jornada, progreso visible). El usuario encuentra su propio ritmo sin que se lo preguntemos.
+
+### Prioridad de implementación
+
+- **v1 (MVP)**: si el tiempo aprieta, las 3 cards del Flow B se cortan. La homepage queda con un CTA directo + 3 bullets de texto. El Flow A (invitado) sí entra en v1 porque es el flujo principal.
+- **v1.1**: cards pulidas del Flow B.
